@@ -36,7 +36,8 @@ namespace razorweb
 
 
             services.AddRazorPages();
-            services.AddDbContext<MyBlogContext>(options => {
+            services.AddDbContext<MyBlogContext>(options =>
+            {
                 string connectString = Configuration.GetConnectionString("MyBlogContext");
                 options.UseSqlServer(connectString);
             });
@@ -49,10 +50,11 @@ namespace razorweb
             // services.AddDefaultIdentity<AppUser>()
             //         .AddEntityFrameworkStores<MyBlogContext>()
             //         .AddDefaultTokenProviders();
-                    
+
 
             // Truy cập IdentityOptions
-            services.Configure<IdentityOptions> (options => {
+            services.Configure<IdentityOptions>(options =>
+            {
                 // Thiết lập về Password
                 options.Password.RequireDigit = false; // Không bắt phải có số
                 options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
@@ -62,8 +64,8 @@ namespace razorweb
                 options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
 
                 // Cấu hình Lockout - khóa user
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes (5); // Khóa 5 phút
-                options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lầ thì khóa
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Khóa 5 phút
+                options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lần thì khóa
                 options.Lockout.AllowedForNewUsers = true;
 
                 // Cấu hình về User.
@@ -80,9 +82,27 @@ namespace razorweb
                     opt.LoginPath = "/dang-nhap";
                     opt.LogoutPath = "/dang-xuat";
                     opt.AccessDeniedPath = "/access-denied";
-                    
+
                 });
-            });        
+
+            });
+            //ClientId
+            //984192156749-hep7lr8776hpqoaif8ic3re6nmbdbhuv.apps.googleusercontent.com
+            //Client Secret
+            //GOCSPX - 4xaZ35uavGVfkAXzoxhnAAjPMWT8
+            services.AddAuthentication()
+                .AddGoogle(googleOptions =>
+                {
+                        // Đọc thông tin Authentication:Google từ appsettings.json
+                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+
+                        // Thiết lập ClientID và ClientSecret để truy cập API google
+                    googleOptions.ClientId = googleAuthNSection["ClientId"];
+                    googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+                        // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
+                    googleOptions.CallbackPath = "/dang-nhap-tu-google";
+
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -112,7 +132,7 @@ namespace razorweb
                 endpoints.MapRazorPages();
             });
 
-           
+
 
         }
     }

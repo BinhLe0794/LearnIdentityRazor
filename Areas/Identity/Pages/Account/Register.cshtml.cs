@@ -69,6 +69,10 @@ namespace razorweb.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            foreach (AuthenticationScheme scheme in ExternalLogins)
+            {
+                _logger.LogInformation(scheme.Name);
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
