@@ -31,6 +31,7 @@ namespace razorweb.Areas.Identity.Pages.Account
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
+            _logger.LogWarning(returnUrl);
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

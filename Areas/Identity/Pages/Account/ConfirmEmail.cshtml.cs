@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +24,7 @@ namespace razorweb.Areas.Identity.Pages.Account
 
         [TempData]
         public string StatusMessage { get; set; }
-
+        // nhận được userId và token được gửi tới email
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
             if (userId == null || code == null)
@@ -39,8 +39,11 @@ namespace razorweb.Areas.Identity.Pages.Account
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+
             var result = await _userManager.ConfirmEmailAsync(user, code);
+
             StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+
             return Page();
         }
     }
