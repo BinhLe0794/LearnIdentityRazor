@@ -1,0 +1,30 @@
+﻿@page "/admin/roles/"
+
+@model             IndexModel
+
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<a asp-page="./Create">Create</a>
+<partial name="_StatusMessage.cshtml" model="@Model.StatusMessage"/>
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Role</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var role in Model.Roles)
+    {
+        <tr>
+            <td>@role.Id</td>
+            <td>@role.Name</td>
+            <td>
+                <a asp-page="./Edit" asp-route-roleId="@role.Id" >Edit</a>
+                <a asp-page="./Delete" asp-route-roleId="@role.Id" >Delete</a>
+            </td>
+        </tr>
+    }
+</table>

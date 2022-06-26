@@ -1,0 +1,24 @@
+﻿@page "/admin/user-roles/{userId}"
+@model AddRolesModel
+
+@{
+    ViewData["Title"] = "Profiles";
+
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<partial name="_StatusMessage.cshtml" model="@Model.StatusMessage"/>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label>Roles: </label>
+       @Html.ListBoxFor(model => model.RoleNames, @Model.SelectListRoles ,new{
+           id = "id-select-roles",
+           @class = "form-control"
+       })
+        <span asp-validation-for="RoleNames"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

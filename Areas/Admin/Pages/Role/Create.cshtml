@@ -1,0 +1,19 @@
+﻿@page
+@model CreateModel
+@{
+      ViewData["Title"] = "Create Role";
+}
+<h2>@ViewData["Title"]</h2>
+
+<partial name="_StatusMessage.cshtml" model="@Model.StatusMessage"/>
+
+<form method="post" asp-page="/">
+     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="Input.Name" />
+    <button type="submit">Create</button>
+    <span asp-validation-for="Input.Name"></span>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

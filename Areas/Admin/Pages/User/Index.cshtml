@@ -1,0 +1,35 @@
+﻿@page "/admin/users/"
+
+@model  IndexModel
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<a asp-page="./Create">Create</a>
+<partial name="_StatusMessage.cshtml" model="@Model.StatusMessage"/>
+<table class="table">
+    <tr>
+        <th>Id</th>
+         <th>UserName</th>
+        <th>Role</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td>@user.Id</td>
+            <td>@user.UserName</td>
+            <td>
+                <a asp-page="./AddRoles" asp-route-userId="@user.Id">
+                   @user.Roles                  
+            </a>
+            </td>
+            <td>
+                <a asp-page="./SetPassword" asp-route-userId="@user.Id" >Set Password</a>
+            </td>
+        </tr>
+    }
+</table>

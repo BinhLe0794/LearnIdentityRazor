@@ -45,11 +45,10 @@ namespace razorweb
             services.AddIdentity<AppUser, IdentityRole>()
                     .AddEntityFrameworkStores<MyBlogContext>()
                     .AddDefaultTokenProviders();
-
             // services.AddDefaultIdentity<AppUser>()
             //         .AddEntityFrameworkStores<MyBlogContext>()
             //         .AddDefaultTokenProviders();
-                    
+
 
             // Truy cập IdentityOptions
             services.Configure<IdentityOptions> (options => {
@@ -63,7 +62,7 @@ namespace razorweb
 
                 // Cấu hình Lockout - khóa user
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes (5); // Khóa 5 phút
-                options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lầ thì khóa
+                options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lần thì khóa
                 options.Lockout.AllowedForNewUsers = true;
 
                 // Cấu hình về User.
@@ -75,12 +74,12 @@ namespace razorweb
                 options.SignIn.RequireConfirmedEmail = false;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
                 options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
 
-                services.ConfigureApplicationCookie(opt =>
-                {
-                    opt.LoginPath = "/dang-nhap";
-                    opt.LogoutPath = "/dang-xuat";
-                    opt.AccessDeniedPath = "/access-denied";
-                    
+                services.ConfigureApplicationCookie(options => {
+                    // options.Cookie.HttpOnly = true;
+                    // options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                    options.LoginPath = "/Account/Login";
+                    options.LogoutPath = $"/logout/";
+                    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
                 });
             });        
         }

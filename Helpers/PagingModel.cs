@@ -1,6 +1,6 @@
 using System;
 
-namespace XTL.Helpers
+namespace razorweb.Helpers
 {
     public class PagingModel
     {
@@ -8,6 +8,6 @@ namespace XTL.Helpers
         public int countpages { get; set; }
 
         public Func<int?, string> generateUrl { get; set; }
-        
+
     }
 }
