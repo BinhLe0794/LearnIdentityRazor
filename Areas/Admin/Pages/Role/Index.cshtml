@@ -20,7 +20,12 @@
     {
         <tr>
             <td>@role.Id</td>
-            <td>@role.Name</td>
+            <td>@role.Name
+                            @foreach(var claim in @role.Claims)
+                            {
+                                <small>@claim</small>
+                            }
+                </td>
             <td>
                 <a asp-page="./Edit" asp-route-roleId="@role.Id" >Edit</a>
                 <a asp-page="./Delete" asp-route-roleId="@role.Id" >Delete</a>

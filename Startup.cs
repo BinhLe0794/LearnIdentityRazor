@@ -49,7 +49,28 @@ namespace razorweb
             //         .AddEntityFrameworkStores<MyBlogContext>()
             //         .AddDefaultTokenProviders();
 
+            services.ConfigureApplicationCookie(options => {
+                // options.Cookie.HttpOnly = true;
+                // options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.LoginPath        = "/dang-nhap/";
+                options.LogoutPath       = $"/logout/";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
+            //Policy Authorization
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("AllowEditRole",
+                    policyBuider =>
+                    {
+                        //Condition
+                        policyBuider.RequireAuthenticatedUser();
+                        // policyBuider.RequireRole("Admin");
+                        //Claim
+                        policyBuider.RequireClaim("blog", "get");
+                        //Claims
 
+                    });
+            });
             // Truy cập IdentityOptions
             services.Configure<IdentityOptions> (options => {
                 // Thiết lập về Password
@@ -74,13 +95,7 @@ namespace razorweb
                 options.SignIn.RequireConfirmedEmail = false;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
                 options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
 
-                services.ConfigureApplicationCookie(options => {
-                    // options.Cookie.HttpOnly = true;
-                    // options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                    options.LoginPath = "/Account/Login";
-                    options.LogoutPath = $"/logout/";
-                    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
-                });
+
             });        
         }
 
@@ -128,8 +143,11 @@ Identity:
     - Authorization: Xác thực quyền truy cập
     - Quản lý user: Sign Up, User, Role  ...
 
-
-
+ * Role-based Authorization
+ * Policy - based
+ * Claims - based
+    -> Đặc tính của một đối tượng
+    
 
  /Identity/Account/Login
  /Identity/Account/Manage

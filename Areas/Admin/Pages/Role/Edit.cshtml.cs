@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using razorweb.models;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace razorweb.Areas.Admin.Pages.Role
 {
@@ -20,24 +22,31 @@ namespace razorweb.Areas.Admin.Pages.Role
         }
         [BindProperty]
         public InputModel Input { get; set; }
-        public async void OnGet(string roleId)
+        
+        public IdentityRole Role { get; set; } = new IdentityRole();
+
+        public List<IdentityRoleClaim<string>> Claims { get; set; } = new List<IdentityRoleClaim<string>>();
+
+        public async Task<IActionResult> OnGet(string roleId)
         {
-            System.Console.WriteLine(roleId);
             if (string.IsNullOrEmpty(roleId))
             {
                  RedirectToPage("Index");
             }
-            var role = await _roleManager.FindByIdAsync(roleId);
-            if (role == null)
+            var _role = await _roleManager.FindByIdAsync(roleId);
+            if (_role == null)
             {
                 StatusMessage = "None Role";
                 RedirectToPage("Index");
             }
+            Role   = _role;
+            Claims = await _myBlogContext.RoleClaims.Where(rc => rc.RoleId == Role.Id).ToListAsync();
+            
             Input = new InputModel()
             {
-                Name = role.Name
+                Name = Role.Name
             };
-
+            return Page();
         }
 
         public async Task<IActionResult> OnPost(string roleId)

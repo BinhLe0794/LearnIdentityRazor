@@ -17,7 +17,24 @@
 
     <button type="submit">Save</button>
 </form>
-
+<hr/>
+<div>
+    <p>
+        Claims Role
+        <a asp-page="./AddRoleClaim" asp-route-roleId="@Model.Role.Id">+ Add Claims</a>
+    </p>
+    @if( Model.Claims.Any() )
+    {
+        <ul>
+            @foreach(var claim in Model.Claims)
+            {
+                <li>
+                    <a asp-page="./EditRoleClaim" asp-route-claimId="@claim.Id"> @claim.ClaimType : @claim.ClaimValue</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
