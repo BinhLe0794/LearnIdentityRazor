@@ -12,7 +12,8 @@ using razorweb.models;
  */
 namespace razorweb.Pages.Blog;
 // [Authorize(Roles = "staff,admin")] // Chỉ cần thỏa mãn 1 trong các điều kiện trên. Có phân biệt chữ hoa
-[Authorize (Policy = "AllowEditRole")]
+// [Authorize (Policy = "AllowEditRole")]
+ [Authorize (Policy = "InGenZ")]
 public class IndexModel : PageModel
 {
     private readonly MyBlogContext _context;

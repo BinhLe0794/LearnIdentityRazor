@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,7 +13,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using razorweb.IdentityServer4;
 using razorweb.models;
+using razorweb.Security.Requirements;
 
 namespace razorweb
 {
@@ -36,11 +40,30 @@ namespace razorweb
 
 
             services.AddRazorPages();
+            services.AddControllersWithViews();
             services.AddDbContext<MyBlogContext>(options => {
                 string connectString = Configuration.GetConnectionString("MyBlogContext");
                 options.UseSqlServer(connectString);
             });
-
+            //Cấu hình cho IdentityServer4
+            // var builder = services.AddIdentityServer(options =>
+            //                        {
+            //                            options.Events.RaiseErrorEvents       = true;
+            //                            options.Events.RaiseInformationEvents = true;
+            //                            options.Events.RaiseFailureEvents     = true;
+            //                            options.Events.RaiseSuccessEvents     = true;
+            //                        })
+            //                       .AddInMemoryApiResources(Config.Apis)
+            //                       .AddInMemoryClients(Config.Clients)
+            //                       .AddInMemoryIdentityResources(Config.Ids)
+            //                       .AddAspNetIdentity<AppUser>();
+            
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Knowledge Space API", Version = "v1" });
+            });
+            //kiểm tra requiredment cho identity
+            // services.AddSingleton<IAuthenticationHandler, AppAuthorizationHandler>();
             // Dang ky Identity
             services.AddIdentity<AppUser, IdentityRole>()
                     .AddEntityFrameworkStores<MyBlogContext>()
@@ -70,7 +93,16 @@ namespace razorweb
                         //Claims
 
                     });
+                //Sử dụng dịch vụ để có thể quản lý điều kiện của policy
+                // opt.AddPolicy("InGenZ",
+                //     policyBuider =>
+                //     {
+                //         //Condition
+                //         policyBuider.RequireAuthenticatedUser();
+                //         policyBuider.Requirements.Add(new GenZRequirement());
+                //     });
             });
+            
             // Truy cập IdentityOptions
             services.Configure<IdentityOptions> (options => {
                 // Thiết lập về Password
@@ -109,11 +141,11 @@ namespace razorweb
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
+            
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -124,9 +156,15 @@ namespace razorweb
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
+            });
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
-           
 
         }
     }

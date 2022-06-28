@@ -22,7 +22,7 @@ namespace razorweb.Areas.Admin.Pages.User
             _roleManager = roleManager;
         }
         [BindProperty]
-        public AppUser User { get; set; }
+        public new AppUser User { get; set; }
 
         [BindProperty]
         public string[] RoleNames { get; set; }
