@@ -3,33 +3,34 @@
 @model             IndexModel
 
 @{
-    ViewData["Title"] = "Roles";
+  ViewData["Title"] = "Roles";
 }
 
 <h2>@ViewData["Title"]</h2>
 
 <a asp-page="./Create">Create</a>
-<partial name="_StatusMessage.cshtml" model="@Model.StatusMessage"/>
+<partial model="@Model.StatusMessage" name="_StatusMessage.cshtml"/>
 <table class="table">
+  <tr>
+    <th>Id</th>
+    <th>Role</th>
+    <th>Actions</th>
+  </tr>
+  @foreach(var role in Model.Roles)
+  {
     <tr>
-        <th>Id</th>
-        <th>Role</th>
-        <th>Actions</th>
+      <td>@role.Id</td>
+      <td>
+        @role.Name
+        @foreach(var claim in role.Claims)
+        {
+          <small>@claim</small>
+        }
+      </td>
+      <td>
+        <a asp-page="./Edit" asp-route-roleId="@role.Id">Edit</a>
+        <a asp-page="./Delete" asp-route-roleId="@role.Id">Delete</a>
+      </td>
     </tr>
-    @foreach (var role in Model.Roles)
-    {
-        <tr>
-            <td>@role.Id</td>
-            <td>@role.Name
-                            @foreach(var claim in @role.Claims)
-                            {
-                                <small>@claim</small>
-                            }
-                </td>
-            <td>
-                <a asp-page="./Edit" asp-route-roleId="@role.Id" >Edit</a>
-                <a asp-page="./Delete" asp-route-roleId="@role.Id" >Delete</a>
-            </td>
-        </tr>
-    }
+  }
 </table>

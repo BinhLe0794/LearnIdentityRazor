@@ -3,24 +3,23 @@
 @model razorweb.Areas.Admin.Pages.Role.EditRoleClaimModel
 
 @{
-    ViewData["Title"] = "EditRoleClaim";
+  ViewData["Title"] = "EditRoleClaim";
 }
-
 
 <h2>@ViewData["Title"]</h2>
 
-<partial name="_StatusMessage.cshtml" model="@Model.StatusMessage"/>
+<partial model="@Model.StatusMessage" name="_StatusMessage.cshtml"/>
 
 <form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div>
+  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+  <div>
     <label asp-for="Input.Type"></label>
-    <input asp-for="Input.Type" />
+    <input asp-for="Input.Type"/>
     <span asp-validation-for="Input.Type"></span>
-    
-        <label asp-for="Input.Value"></label>
-        <input asp-for="Input.Value" />
-        <span asp-validation-for="Input.Value"></span>
+
+    <label asp-for="Input.Value"></label>
+    <input asp-for="Input.Value"/>
+    <span asp-validation-for="Input.Value"></span>
     <button type="submit">Save</button>
-    </div>
+  </div>
 </form>

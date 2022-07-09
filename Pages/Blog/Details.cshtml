@@ -1,13 +1,15 @@
 @page "/xemblog/{id:int}"
-@model razorweb.Pages.Blog.DetailsModel
+@model DetailsModel
 
 @{
-    ViewData["Title"] = @Model.Article.Title;
-    
+  ViewData["Title"] = Model.Article.Title;
+
 }
 
 <h1>@Model.Article.Title</h1>
-<p><i>@Html.DisplayFor(model => model.Article.Created)</i></p>
+<p>
+  <i>@Html.DisplayFor(model => model.Article.Created)</i>
+</p>
 <hr>
 @* @Html.DisplayFor(model => model.Article.Content) *@
 @Html.Raw(Model.Article.Content)
@@ -15,6 +17,6 @@
 <hr>
 
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Article.Id">Sửa</a> |
-    <a asp-page="./Index">Danh sách bài viết</a>
+  <a asp-page="./Edit" asp-route-id="@Model.Article.Id">Sửa</a> |
+  <a asp-page="./Index">Danh sách bài viết</a>
 </div>

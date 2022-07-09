@@ -3,33 +3,33 @@
 @model  IndexModel
 
 @{
-    ViewData["Title"] = "Users";
+  ViewData["Title"] = "Users";
 }
 
 <h2>@ViewData["Title"]</h2>
 
 <a asp-page="./Create">Create</a>
-<partial name="_StatusMessage.cshtml" model="@Model.StatusMessage"/>
+<partial model="@Model.StatusMessage" name="_StatusMessage.cshtml"/>
 <table class="table">
+  <tr>
+    <th>Id</th>
+    <th>UserName</th>
+    <th>Role</th>
+    <th>Actions</th>
+  </tr>
+  @foreach(var user in Model.Users)
+  {
     <tr>
-        <th>Id</th>
-         <th>UserName</th>
-        <th>Role</th>
-        <th>Actions</th>
+      <td>@user.Id</td>
+      <td>@user.UserName</td>
+      <td>
+        <a asp-page="./AddRoles" asp-route-userId="@user.Id">
+          @(user.Roles.Length > 3 ? user.Roles : "...")
+        </a>
+      </td>
+      <td>
+        <a asp-page="./SetPassword" asp-route-userId="@user.Id">Set Password</a>
+      </td>
     </tr>
-    @foreach (var user in Model.Users)
-    {
-        <tr>
-            <td>@user.Id</td>
-            <td>@user.UserName</td>
-            <td>
-                <a asp-page="./AddRoles" asp-route-userId="@user.Id">
-                   @(user.Roles.Length > 3 ? user.Roles : "..." )                  
-            </a>
-            </td>
-            <td>
-                <a asp-page="./SetPassword" asp-route-userId="@user.Id" >Set Password</a>
-            </td>
-        </tr>
-    }
+  }
 </table>

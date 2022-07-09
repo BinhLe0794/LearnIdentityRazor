@@ -1,9 +1,6 @@
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using razorweb.models;
 
@@ -15,32 +12,17 @@ public class EditRoleClaimModel : RoleManagerBase
       myBlogContext)
    {
    }
-   public class InputModel
-   {
-      public string Type { get; set; } = string.Empty;
-      public string Value { get; set; } = string.Empty;
-   }
    [BindProperty]
    public InputModel Input { get; set; } = new();
    public IdentityRole Role { get; set; } = new();
    public IdentityRoleClaim<string> Claim { get; set; } = new();
-
    public async Task<IActionResult> OnGet(int? claimId)
    {
-      if( claimId == null )
-      {
-         return NotFound("Cant find Claims");
-      }
+      if( claimId == null ) return NotFound("Cant find Claims");
       var claim = await _myBlogContext.RoleClaims.FirstOrDefaultAsync(x => x.Id == claimId);
-      if( claim == null )
-      {
-         return NotFound("Cant find Claims");
-      }
+      if( claim == null ) return NotFound("Cant find Claims");
       var _role = await _roleManager.FindByIdAsync(claim.RoleId);
-      if( _role == null )
-      {
-         return NotFound("Cant find Role");
-      }
+      if( _role == null ) return NotFound("Cant find Role");
       Role = _role;
       Input = new InputModel
       {
@@ -51,39 +33,30 @@ public class EditRoleClaimModel : RoleManagerBase
    }
    public async Task<IActionResult> OnPost(int? claimId)
    {
-      if( claimId == null )
-      {
-         return Page();
-      }
+      if( claimId == null ) return Page();
       var claim = await _myBlogContext.RoleClaims.FirstOrDefaultAsync(x => x.Id == claimId);
-      if( claim == null )
-      {
-         return Page();
-      }
+      if( claim == null ) return Page();
       var _role = await _roleManager.FindByIdAsync(claim.RoleId);
-      if( _role == null )
+      if( _role == null ) return Page();
+      if( !ModelState.IsValid ) return Page();
+      var isAny = await _myBlogContext.RoleClaims.AnyAsync(x => x.RoleId     == _role.Id    &&
+                                                                x.ClaimType  == Input.Type  &&
+                                                                x.ClaimValue == Input.Value &&
+                                                                x.Id         != claim.Id);
+      if( isAny )
       {
+         ModelState.AddModelError(string.Empty, $"Already have {Input.Type}");
          return Page();
       }
-
-      if( !ModelState.IsValid )
-      {
-         return Page();
-      }
-      
-      var isAny = await _myBlogContext.RoleClaims.AnyAsync(x => x.RoleId == _role.Id &&
-         x.ClaimType == Input.Type && x.ClaimValue == Input.Value && x.Id != claim.Id);
-      if(isAny)
-      {
-         ModelState.AddModelError(string.Empty,$"Already have {Input.Type}");
-         return Page();
-      }
-      claim.ClaimType = Input.Type;
+      claim.ClaimType  = Input.Type;
       claim.ClaimValue = Input.Value;
-      
       await _myBlogContext.SaveChangesAsync();
-
       StatusMessage = "Update Claim";
       return RedirectToPage("Index");
+   }
+   public class InputModel
+   {
+      public string Type { get; set; } = string.Empty;
+      public string Value { get; set; } = string.Empty;
    }
 }

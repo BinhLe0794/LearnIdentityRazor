@@ -1,33 +1,33 @@
-@using Microsoft.AspNetCore.Identity
 @using razorweb.models
+@using Microsoft.AspNetCore.Identity
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
 @{
-    // SignInManager.IsSignedIn(User)
-    // UserManager.GetUserName(User)
+  // SignInManager.IsSignedIn(User)
+  // UserManager.GetUserName(User)
 
 }
 <ul class="navbar-nav">
 
-    @if (SignInManager.IsSignedIn(User))
-    {
-      <li class="nav-item">
-          <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">
-            Xin chào @UserManager.GetUserName(User)!
-          </a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Đăng xuất</a>
-      </li>
-    }
-    else
-    {
-      <li class="nav-item">
-          <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Đăng ký</a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Đăng nhập</a>
-      </li>
-    } 
+  @if( SignInManager.IsSignedIn(User) )
+  {
+    <li class="nav-item">
+      <a asp-area="Identity" asp-page="/Account/Manage/Index" class="nav-link text-dark">
+        Xin chào @UserManager.GetUserName(User)!
+      </a>
+    </li>
+    <li class="nav-item">
+      <a asp-area="Identity" asp-page="/Account/Logout" class="nav-link text-dark">Đăng xuất</a>
+    </li>
+  }
+  else
+  {
+    <li class="nav-item">
+      <a asp-area="Identity" asp-page="/Account/Register" class="nav-link text-dark">Đăng ký</a>
+    </li>
+    <li class="nav-item">
+      <a asp-area="Identity" asp-page="/Account/Login" class="nav-link text-dark">Đăng nhập</a>
+    </li>
+  }
 </ul>

@@ -3,38 +3,38 @@
 @model razorweb.Areas.Admin.Pages.Role.EditModel
 
 @{
-    ViewData["Title"] = "Edit Role";
+  ViewData["Title"] = "Edit Role";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<partial name="_StatusMessage.cshtml" model="@Model.StatusMessage" />
+<partial model="@Model.StatusMessage" name="_StatusMessage.cshtml"/>
 
 <form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input asp-for="Input.Name" />
-    <span asp-validation-for="Input.Name"></span>
+  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+  <input asp-for="Input.Name"/>
+  <span asp-validation-for="Input.Name"></span>
 
-    <button type="submit">Save</button>
+  <button type="submit">Save</button>
 </form>
 <hr/>
 <div>
-    <p>
-        Claims Role
-        <a asp-page="./AddRoleClaim" asp-route-roleId="@Model.Role.Id">+ Add Claims</a>
-    </p>
-    @if( Model.Claims.Any() )
-    {
-        <ul>
-            @foreach(var claim in Model.Claims)
-            {
-                <li>
-                    <a asp-page="./EditRoleClaim" asp-route-claimId="@claim.Id"> @claim.ClaimType : @claim.ClaimValue</a>
-                </li>
-            }
-        </ul>
-    }
+  <p>
+    Claims Role
+    <a asp-page="./AddRoleClaim" asp-route-roleId="@Model.Role.Id">+ Add Claims</a>
+  </p>
+  @if( Model.Claims.Any() )
+  {
+    <ul>
+      @foreach(var claim in Model.Claims)
+      {
+        <li>
+          <a asp-page="./EditRoleClaim" asp-route-claimId="@claim.Id"> @claim.ClaimType : @claim.ClaimValue</a>
+        </li>
+      }
+    </ul>
+  }
 </div>
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+  <partial name="_ValidationScriptsPartial"/>
 }
